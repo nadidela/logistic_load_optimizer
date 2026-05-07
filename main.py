@@ -103,3 +103,40 @@ print("After Sampling:", df.shape
 weights = df['weight_grams'].astype(int).tolist()
 values = df['price_cleaned'].astype(int).tolist()
 products = df['product_name'].tolist()
+
+#knapsack
+def knapsack_optimized(weights, values, capacity):
+
+    n = len(weights)
+
+    dp = [0] * (capacity + 1)
+    keep = [[False] * (capacity + 1) for _ in range(n)]
+
+    for i in range(n):
+
+        w = weights[i]
+        v = values[i]
+
+        if w > capacity:
+            continue
+
+        for cap in range(capacity, w - 1, -1):
+
+            if dp[cap - w] + v > dp[cap]:
+                dp[cap] = dp[cap - w] + v
+                keep[i][cap] = True
+
+    selected_items = []
+    total_weight = 0
+    cap = capacity
+
+    for i in range(n - 1, -1, -1):
+
+        if keep[i][cap]:
+            selected_items.append(i)
+            total_weight += weights[i]
+            cap -= weights[i]
+
+    selected_items.reverse()
+
+    return dp[capacity], total_weight, selected_items
