@@ -70,6 +70,36 @@ def extract_weight(text):
 
     return np.nan
 
-
+# cleaning data
 df['weight_grams'] = df['product_information'].apply(extract_weight)
 df.dropna(subset=['weight_grams'], inplace=True)
+
+df = df[
+    (df['price_cleaned'] > 0) &
+    (df['weight_grams'] > 0) &
+    (df['weight_grams'] <= 50000)
+].copy()
+
+df['weight_grams'] = df['weight_grams'].round().astype(int)
+
+# Avoid extremely tiny item weights
+df['weight_grams'] = df['weight_grams'].clip(lower=10)
+
+df['product_name'] = (
+    df['product_name']
+    .astype(str)
+    .str.strip()
+    .str.replace(r'\s+', ' ', regex=True)
+)
+
+print("After Cleaning:", df.shape)
+
+#sample the data
+df = df.sample(n=min(5000, len(df)), random_state=42).copy()
+
+print("After Sampling:", df.shape
+
+#preparing Knapsack
+weights = df['weight_grams'].astype(int).tolist()
+values = df['price_cleaned'].astype(int).tolist()
+products = df['product_name'].tolist()
