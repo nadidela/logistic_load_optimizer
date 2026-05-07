@@ -140,3 +140,53 @@ def knapsack_optimized(weights, values, capacity):
     selected_items.reverse()
 
     return dp[capacity], total_weight, selected_items
+
+#greedy baseline
+def greedy_baseline(weights, values, capacity):
+
+    items = []
+
+    for i in range(len(weights)):
+        items.append((values[i], i))
+
+    items.sort(reverse=True)
+
+    total_value = 0
+    total_weight = 0
+    selected = []
+
+    for value, i in items:
+
+        if total_weight + weights[i] <= capacity:
+            selected.append(i)
+            total_weight += weights[i]
+            total_value += values[i]
+
+    return total_value, total_weight, selected
+
+#user input
+capacity = int(input("\nEnter Container Capacity in grams: "))
+
+#run dynamic programming
+start_time = time.time()
+
+optimal_value, optimal_weight, selected_items = knapsack_optimized(
+    weights,
+    values,
+    capacity
+)
+
+dp_time = time.time() - start_time
+
+#greedy baseline
+start_time = time.time()
+
+baseline_value, baseline_weight, baseline_selected = greedy_baseline(
+    weights,
+    values,
+    capacity
+)
+
+
+
+baseline_time = time.time() - start_time
