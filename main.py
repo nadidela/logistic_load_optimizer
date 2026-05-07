@@ -97,7 +97,7 @@ print("After Cleaning:", df.shape)
 #sample the data
 df = df.sample(n=min(5000, len(df)), random_state=42).copy()
 
-print("After Sampling:", df.shape
+print("After Sampling:", df.shape)
 
 #preparing Knapsack
 weights = df['weight_grams'].astype(int).tolist()
@@ -187,6 +187,58 @@ baseline_value, baseline_weight, baseline_selected = greedy_baseline(
     capacity
 )
 
-
-
 baseline_time = time.time() - start_time
+      
+print("--------------------------------------")
+print("DYNAMIC PROGRAMMING KNAPSACK RESULTS")
+print("--------------------------------------")
+
+print(f"Container Capacity      : {capacity} grams")
+print(f"Total Items Packed      : {len(selected_items)}")
+print(f"Total Shipment Value    : ${optimal_value}")
+print(f"Total Weight Used       : {optimal_weight} grams")
+print(f"Capacity Utilization    : {(optimal_weight / capacity) * 100:.2f}%")
+print(f"Execution Time          : {dp_time:.4f} seconds")
+
+print("\nTop Selected Products:\n")
+
+for idx in selected_items[:20]:
+    print(
+        f"Product: {products[idx][:70]} | "
+        f"Weight: {weights[idx]}g | "
+        f"Value: ${values[idx]}"
+    )
+
+print("-------------------------")
+print("GREEDY BASELINE RESULTS")
+print("--------------------------")
+
+print(f"Container Capacity      : {capacity} grams")
+print(f"Total Items Packed      : {len(baseline_selected)}")
+print(f"Total Shipment Value    : ${baseline_value}")
+print(f"Total Weight Used       : {baseline_weight} grams")
+print(f"Capacity Utilization    : {(baseline_weight / capacity) * 100:.2f}%")
+print(f"Execution Time          : {baseline_time:.4f} seconds")
+
+print("-------------------------")
+print("PERFORMANCE COMPARISON")
+print("-------------------------")
+
+difference = optimal_value - baseline_value
+
+improvement = (
+    (difference / baseline_value) * 100
+    if baseline_value > 0 else 0
+)
+
+print(f"DP Shipment Value       : ${optimal_value}")
+print(f"Baseline Shipment Value : ${baseline_value}")
+print(f"Difference              : ${difference}")
+print(f"Improvement             : {improvement:.2f}%")
+
+if optimal_value > baseline_value:
+    print("\nDynamic Programming produced a better solution than the Greedy baseline.")
+elif optimal_value == baseline_value:
+    print("\nBoth methods produced the same shipment value.")
+else:
+    print("\nThe Greedy baseline produced a better result for this case.")
