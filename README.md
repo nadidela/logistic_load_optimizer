@@ -35,17 +35,25 @@ Source: https://www.kaggle.com/datasets/lokeshparab/amazon-products-dataset
 Each product includes several metadata fields:
 
 Product Name
+
 Product Price
+
 Product Information
+
 Product Category
+
 Product Ratings
 
 Since this is a real world dataset, it contains noise such as:
 
 Prices stored as text with currency symbols (£24.99).
+
 Product weights hidden inside large text descriptions.
+
 Different weight formats like kg, g, lb, and oz.
+
 Missing values in several product fields.
+
 Broken or malformed rows inside the CSV file.
 
 ---
